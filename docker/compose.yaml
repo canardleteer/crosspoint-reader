@@ -1,0 +1,20 @@
+name: crosspoint-reader
+
+services:
+  firmware:
+    build: .
+    image: crosspoint-builder
+    working_dir: /src
+    # Wrapper exports these; raw `docker compose` on Linux bash usually has UID.
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      HOME: /tmp
+      PLATFORMIO_CORE_DIR: /cache/platformio
+    volumes:
+      # Paths are relative to this file, so .. is the repository root.
+      - ..:/src
+      - pio-cache:/cache/platformio
+    command: ["pio", "run", "-e", "default"]
+
+volumes:
+  pio-cache:

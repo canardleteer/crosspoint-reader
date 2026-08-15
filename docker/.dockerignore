@@ -1,0 +1,3 @@
+# Toolchain-only image: nothing from docker/ is COPYed. Keep the build
+# context empty so `docker compose build` stays fast as the repo grows.
+*

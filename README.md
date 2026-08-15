@@ -135,6 +135,7 @@ Conversion runs the firmware repo's `lib/EpdFont/scripts/fontconvert_sdcard.py` 
 - [Web server usage](./docs/webserver.md)
 - [Web server endpoints](./docs/webserver-endpoints.md)
 - [Project scope](./SCOPE.md)
+- [Docker firmware build](./docs/docker-build.md) — rebuild `firmware.bin` with only Docker
 - [Contributing docs](./docs/contributing/README.md)
 - [Touch and UI development](./docs/contributing/touch-and-ui.md) - how to build new screens on the FreeInkUI activity bases (UiListActivity and friends), plus build envs for the non-Xteink touch devices
 
@@ -144,8 +145,8 @@ Conversion runs the firmware repo's `lib/EpdFont/scripts/fontconvert_sdcard.py` 
 
 ### Prerequisites
 
-- [pioarduino](https://github.com/pioarduino/pioarduino) or VS Code + pioarduino plugin
-- Python 3.8+
+- [pioarduino](https://github.com/pioarduino/pioarduino) or VS Code + pioarduino plugin, **or** Docker (see [Docker firmware build](./docs/docker-build.md))
+- Python 3.8+ (not required for the Docker path)
 - `clang-format` 21
 - USB-C cable supporting data transfer
 
@@ -176,6 +177,15 @@ services.udev.packages = with pkgs; [ platformio-core.udev ];
 ```
 
 After rebuilding the system configuration, reconnect the device or reload udev rules.
+
+### Docker (no local PlatformIO)
+
+Rebuild firmware with only Docker. Full steps, board envs, caches, and output paths: [Docker firmware build](./docs/docker-build.md).
+
+```bash
+./bin/docker-build              # default: X3 / X4
+./bin/docker-build x4pro        # X4 Pro, papermono, sticky, …
+```
 
 ### Build / flash / monitor
 

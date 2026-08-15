@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+if [[ ! -d "$ROOT/freeink-sdk/libs" ]]; then
+  echo "freeink-sdk submodule is missing. Initialize it, then retry:"
+  echo "  git submodule update --init --recursive"
+  exit 1
+fi
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo "docker not found. Install Docker, then retry."
+  exit 1
+fi
+
+if ! docker compose version >/dev/null 2>&1; then
+  echo "docker compose not found. Install Docker Compose v2, then retry."
+  exit 1
+fi
+
+# UID is readonly in bash and not exported by default; GID is unset.
+# Compose interpolates both into `user:` so bind-mounted .pio is host-owned.
+export UID
+export GID="${GID:-$(id -g)}"
+
+envs=("$@")
+if [[ ${#envs[@]} -eq 0 ]]; then
+  envs=(default)
+fi
+
+pio_args=(run)
+for env in "${envs[@]}"; do
+  pio_args+=(-e "$env")
+done
+
+# --build rebuilds the image only when docker/Dockerfile (or its empty context) changed.
+exec docker compose -f "$ROOT/docker/compose.yaml" run --rm --build firmware pio "${pio_args[@]}"

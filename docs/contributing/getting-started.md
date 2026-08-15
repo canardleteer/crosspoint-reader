@@ -4,8 +4,8 @@ This guide helps you build and run CrossPoint locally.
 
 ## Prerequisites
 
-- PlatformIO Core (`pio`) or VS Code + PlatformIO IDE
-- Python 3.8+
+- PlatformIO Core (`pio`) or VS Code + PlatformIO IDE, **or** Docker (see [Docker firmware build](../docker-build.md))
+- Python 3.8+ (not required for the Docker path)
 - `clang-format` 21+ in your `PATH` (CI uses clang-format 21)
 - USB-C cable
 - Xteink X4 device for hardware testing
@@ -66,6 +66,15 @@ chmod +x .githooks/pre-commit
 pio run
 ```
 
+### Docker (no local PlatformIO)
+
+If you do not want to install PlatformIO on the host, use [Docker firmware build](../docker-build.md).
+
+```sh
+./bin/docker-build           # default: X3 / X4
+./bin/docker-build x4pro     # or papermono, sticky, …
+```
+
 ## Flash
 
 ```sh
@@ -83,5 +92,6 @@ pio run
 ## What to read next
 
 - [Architecture Overview](./architecture.md)
+- [Docker firmware build](../docker-build.md)
 - [Development Workflow](./development-workflow.md)
 - [Testing and Debugging](./testing-debugging.md)
